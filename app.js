@@ -75,27 +75,37 @@ async function refreshSummary() {
     const dates = getLast7Days(today);
     const entries = await db.getDays(dates);
 
-    // Calcular totales por músculo
+    // Calcular totales por músculo (priority, normal, total)
     const totals = {};
     MUSCLES.forEach(m => {
-        totals[m.id] = 0;
+        totals[m.id] = { priority: 0, normal: 0, total: 0 };
         entries.forEach(entry => {
-            if (entry && entry.sets && entry.sets[m.id]) {
-                totals[m.id] += entry.sets[m.id];
+            if (entry && entry.sets) {
+                const values = getMuscleValues(entry.sets, m.id);
+                totals[m.id].priority += values.priority;
+                totals[m.id].normal += values.normal;
+                totals[m.id].total += values.priority + values.normal;
             }
         });
     });
 
     // Renderizar lista
     const listEl = document.getElementById('muscle-list');
-    listEl.innerHTML = MUSCLES.map(muscle => `
-        <div class="muscle-card">
-            <div class="muscle-info">
-                <span class="muscle-name">${muscle.name}</span>
+    listEl.innerHTML = MUSCLES.map(muscle => {
+        const t = totals[muscle.id];
+        return `
+            <div class="muscle-card">
+                <div class="muscle-info">
+                    <span class="muscle-name">${muscle.name}</span>
+                    <div class="muscle-breakdown">
+                        <span class="breakdown-item priority">${t.priority} prioritarias</span>
+                        <span class="breakdown-item normal">${t.normal} normales</span>
+                    </div>
+                </div>
+                <div class="muscle-total">${t.total}</div>
             </div>
-            <div class="muscle-total">${totals[muscle.id]}</div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // ========== VISTA EDITOR DE DÍA ==========
@@ -106,24 +116,44 @@ async function refreshEditor() {
 
     // Cargar datos del día
     const entry = await db.getDay(currentEditDate);
-    const sets = entry?.sets || {};
+    const sets = normalizeSets(entry?.sets || {});
 
-    // Renderizar lista de músculos con steppers
+    // Renderizar lista de músculos con steppers dobles
     const listEl = document.getElementById('editor-list');
     listEl.innerHTML = MUSCLES.map(muscle => {
-        const value = sets[muscle.id] || 0;
+        const values = getMuscleValues(sets, muscle.id);
         return `
             <div class="editor-row">
                 <span class="muscle-name">${muscle.name}</span>
-                <div class="stepper">
-                    <button class="btn-stepper" data-muscle="${muscle.id}" data-action="dec">−</button>
-                    <input type="number"
-                           class="stepper-input"
-                           data-muscle="${muscle.id}"
-                           value="${value}"
-                           min="0"
-                           step="1" />
-                    <button class="btn-stepper" data-muscle="${muscle.id}" data-action="inc">+</button>
+                <div class="steppers-container">
+                    <div class="stepper-group">
+                        <label class="stepper-label">Prioritarias</label>
+                        <div class="stepper">
+                            <button class="btn-stepper" data-muscle="${muscle.id}" data-type="priority" data-action="dec">−</button>
+                            <input type="number"
+                                   class="stepper-input"
+                                   data-muscle="${muscle.id}"
+                                   data-type="priority"
+                                   value="${values.priority}"
+                                   min="0"
+                                   step="1" />
+                            <button class="btn-stepper" data-muscle="${muscle.id}" data-type="priority" data-action="inc">+</button>
+                        </div>
+                    </div>
+                    <div class="stepper-group">
+                        <label class="stepper-label">Normales</label>
+                        <div class="stepper">
+                            <button class="btn-stepper" data-muscle="${muscle.id}" data-type="normal" data-action="dec">−</button>
+                            <input type="number"
+                                   class="stepper-input"
+                                   data-muscle="${muscle.id}"
+                                   data-type="normal"
+                                   value="${values.normal}"
+                                   min="0"
+                                   step="1" />
+                            <button class="btn-stepper" data-muscle="${muscle.id}" data-type="normal" data-action="inc">+</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -142,8 +172,9 @@ async function refreshEditor() {
 
 async function handleStepperClick(e) {
     const muscleId = e.target.dataset.muscle;
+    const type = e.target.dataset.type; // 'priority' o 'normal'
     const action = e.target.dataset.action;
-    const input = document.querySelector(`input[data-muscle="${muscleId}"]`);
+    const input = document.querySelector(`input[data-muscle="${muscleId}"][data-type="${type}"]`);
     let value = parseInt(input.value) || 0;
 
     if (action === 'inc') {
@@ -153,24 +184,30 @@ async function handleStepperClick(e) {
     }
 
     input.value = value;
-    await saveCurrentValue(muscleId, value);
+    await saveCurrentValue(muscleId, type, value);
 }
 
 async function handleInputChange(e) {
     const muscleId = e.target.dataset.muscle;
+    const type = e.target.dataset.type;
     let value = parseInt(e.target.value) || 0;
     if (value < 0) value = 0;
     e.target.value = value;
-    await saveCurrentValue(muscleId, value);
+    await saveCurrentValue(muscleId, type, value);
 }
 
-async function saveCurrentValue(muscleId, value) {
+async function saveCurrentValue(muscleId, type, value) {
     // Cargar día actual
     const entry = await db.getDay(currentEditDate);
-    const sets = entry?.sets || {};
+    const sets = normalizeSets(entry?.sets || {});
 
-    // Actualizar valor
-    sets[muscleId] = value;
+    // Asegurarse de que el músculo existe en sets
+    if (!sets[muscleId]) {
+        sets[muscleId] = { priority: 0, normal: 0 };
+    }
+
+    // Actualizar valor específico (priority o normal)
+    sets[muscleId][type] = value;
 
     // Guardar
     await db.saveDay(currentEditDate, sets);
@@ -180,10 +217,21 @@ async function saveCurrentValue(muscleId, value) {
 
 function updateDayTotal() {
     const inputs = document.querySelectorAll('.stepper-input');
-    let total = 0;
+    let totalPriority = 0;
+    let totalNormal = 0;
+
     inputs.forEach(input => {
-        total += parseInt(input.value) || 0;
+        const value = parseInt(input.value) || 0;
+        const type = input.dataset.type;
+
+        if (type === 'priority') {
+            totalPriority += value;
+        } else if (type === 'normal') {
+            totalNormal += value;
+        }
     });
+
+    const total = totalPriority + totalNormal;
     document.getElementById('day-total').textContent = total;
 }
 
@@ -196,7 +244,9 @@ async function copyYesterday() {
         return;
     }
 
-    await db.saveDay(currentEditDate, { ...entry.sets });
+    // Normalizar sets antes de copiar
+    const normalizedSets = normalizeSets(entry.sets);
+    await db.saveDay(currentEditDate, normalizedSets);
     refreshEditor();
     showToast('✓ Copiado desde ayer');
 }

@@ -149,3 +149,44 @@ function getLast7Days(endDateStr) {
 function getTodayStr() {
     return formatDate(new Date());
 }
+
+// Normalizar formato de sets (para compatibilidad con datos antiguos)
+function normalizeSets(sets) {
+    if (!sets) return {};
+
+    const normalized = {};
+    for (const muscleId in sets) {
+        const value = sets[muscleId];
+
+        // Si es un número (formato antiguo), convertir a {priority: 0, normal: value}
+        if (typeof value === 'number') {
+            normalized[muscleId] = { priority: 0, normal: value };
+        }
+        // Si ya es un objeto, asegurarse de que tenga ambos campos
+        else if (typeof value === 'object') {
+            normalized[muscleId] = {
+                priority: value.priority || 0,
+                normal: value.normal || 0
+            };
+        }
+    }
+
+    return normalized;
+}
+
+// Obtener valores de un músculo (con valores por defecto)
+function getMuscleValues(sets, muscleId) {
+    if (!sets || !sets[muscleId]) {
+        return { priority: 0, normal: 0 };
+    }
+
+    const value = sets[muscleId];
+    if (typeof value === 'number') {
+        return { priority: 0, normal: value };
+    }
+
+    return {
+        priority: value.priority || 0,
+        normal: value.normal || 0
+    };
+}

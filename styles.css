@@ -183,12 +183,34 @@ button {
 .muscle-name {
     font-size: 1rem;
     font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.muscle-breakdown {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.breakdown-item {
+    display: inline-block;
+}
+
+.breakdown-item.priority {
+    color: #f59e0b;
+}
+
+.breakdown-item.normal {
+    color: var(--text-secondary);
 }
 
 .muscle-total {
     font-size: 2rem;
     font-weight: 700;
     color: var(--accent);
+    min-width: 60px;
+    text-align: right;
 }
 
 /* Date selector */
@@ -257,13 +279,35 @@ button {
     border-radius: 12px;
     padding: 1rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .editor-row .muscle-name {
     font-size: 1rem;
     font-weight: 500;
+}
+
+/* Steppers container */
+.steppers-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.stepper-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stepper-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
 }
 
 /* Stepper */
