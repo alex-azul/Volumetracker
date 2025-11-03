@@ -148,10 +148,6 @@ La app siempre calcula el total de los **últimos 7 días** (hoy - 6 días hasta
 - [ ] PWA Shortcuts para atajos rápidos
 - [ ] Recordatorios con Web Push
 
-## Licencia
-
-MIT - Úsalo como quieras
-
 ---
 
 **¡Disfruta del tracking! 🚀**
