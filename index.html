@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1e293b">
+    <meta name="description" content="Tracking de volumen muscular con ventana móvil de 7 días">
+    <title>Volume Tracker</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Vista principal: Resumen 7 días -->
+        <div id="summary-view" class="view">
+            <header>
+                <h1>💪 Volume Tracker</h1>
+                <div class="header-actions">
+                    <button id="btn-today" class="btn-icon" title="Hoy">📅</button>
+                    <button id="btn-settings" class="btn-icon" title="Ajustes">⚙️</button>
+                </div>
+            </header>
+
+            <div class="stats-header">
+                <h2>Últimos 7 días</h2>
+                <button id="btn-edit-today" class="btn-primary">Editar hoy</button>
+            </div>
+
+            <div id="muscle-list" class="muscle-list"></div>
+        </div>
+
+        <!-- Vista de editor de día -->
+        <div id="editor-view" class="view hidden">
+            <header>
+                <button id="btn-back" class="btn-icon">←</button>
+                <h1>Editar día</h1>
+                <div class="header-actions">
+                    <button id="btn-copy-yesterday" class="btn-icon" title="Copiar ayer">📋</button>
+                    <button id="btn-clear-day" class="btn-icon" title="Vaciar">🗑️</button>
+                </div>
+            </header>
+
+            <div class="date-selector">
+                <button id="btn-prev-day" class="btn-icon">←</button>
+                <input type="date" id="date-input" />
+                <button id="btn-next-day" class="btn-icon">→</button>
+            </div>
+
+            <div class="editor-stats">
+                <div class="stat-card">
+                    <span class="stat-label">Total del día</span>
+                    <span id="day-total" class="stat-value">0</span>
+                </div>
+            </div>
+
+            <div id="editor-list" class="editor-list"></div>
+        </div>
+
+        <!-- Vista de ajustes -->
+        <div id="settings-view" class="view hidden">
+            <header>
+                <button id="btn-back-settings" class="btn-icon">←</button>
+                <h1>Ajustes</h1>
+            </header>
+
+            <div class="settings-content">
+                <div class="setting-section">
+                    <h3>Datos</h3>
+                    <button id="btn-export" class="btn-secondary">📥 Exportar datos (JSON)</button>
+                    <button id="btn-import" class="btn-secondary">📤 Importar datos (JSON)</button>
+                    <input type="file" id="import-file" accept=".json" style="display:none">
+                </div>
+
+                <div class="setting-section">
+                    <h3>Información</h3>
+                    <p class="info-text">Volume Tracker v1.0</p>
+                    <p class="info-text">Datos almacenados localmente en tu dispositivo</p>
+                    <p class="info-text">
+                        <a href="https://github.com/tu-usuario/volumetracker" target="_blank">
+                            Ver en GitHub
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de notificaciones -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Scripts -->
+    <script src="/db.js"></script>
+    <script src="/app.js"></script>
+    <script>
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registrado:', reg.scope))
+                    .catch(err => console.error('SW error:', err));
+            });
+        }
+    </script>
+</body>
+</html>

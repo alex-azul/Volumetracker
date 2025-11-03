@@ -1,0 +1,406 @@
+/* styles.css - Estilos mobile-first */
+
+:root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --success: #10b981;
+    --danger: #ef4444;
+    --border: #475569;
+    --shadow: rgba(0, 0, 0, 0.3);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+#app {
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+.view {
+    padding: 1rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Botones */
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    border: 1px solid var(--border);
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.75rem;
+}
+
+.btn-secondary:hover {
+    background: var(--bg-tertiary);
+}
+
+.btn-icon {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+}
+
+.btn-icon:hover {
+    background: var(--bg-tertiary);
+}
+
+.btn-icon:active {
+    transform: scale(0.95);
+}
+
+/* Stats header */
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.stats-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Muscle list (vista resumen) */
+.muscle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.muscle-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px var(--shadow);
+    transition: transform 0.2s;
+}
+
+.muscle-card:hover {
+    transform: translateX(4px);
+}
+
+.muscle-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.muscle-name {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.muscle-total {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* Date selector */
+.date-selector {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#date-input {
+    flex: 1;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+#date-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+/* Editor stats */
+.editor-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    flex: 1;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* Editor list */
+.editor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.editor-row {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editor-row .muscle-name {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Stepper */
+.stepper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-stepper {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    user-select: none;
+}
+
+.btn-stepper:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.btn-stepper:active {
+    transform: scale(0.9);
+}
+
+.stepper-input {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: inherit;
+}
+
+.stepper-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Remove spinner arrows from number input */
+.stepper-input::-webkit-inner-spin-button,
+.stepper-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stepper-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Settings */
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.setting-section h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.info-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.info-text a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.info-text a:hover {
+    text-decoration: underline;
+}
+
+/* Toast notifications */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 0.875rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 16px var(--shadow);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Media queries para pantallas más grandes */
+@media (min-width: 768px) {
+    .view {
+        padding: 2rem;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .muscle-total {
+        font-size: 2.5rem;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+    }
+}
+
+/* Dark mode (ya es dark por defecto, pero por si acaso) */
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-primary: #f8fafc;
+        --bg-secondary: #ffffff;
+        --bg-tertiary: #f1f5f9;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --border: #e2e8f0;
+        --shadow: rgba(0, 0, 0, 0.1);
+    }
+}
