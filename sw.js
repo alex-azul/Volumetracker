@@ -2,13 +2,13 @@
 
 const CACHE_NAME = 'volumetracker-v1';
 const ASSETS = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/app.js',
-    '/db.js',
-    '/manifest.json',
-    '/icon.svg'
+    './',
+    './index.html',
+    './styles.css',
+    './app.js',
+    './db.js',
+    './manifest.json',
+    './icon.svg'
 ];
 
 // Instalación: precache de assets
@@ -63,7 +63,7 @@ self.addEventListener('fetch', (event) => {
             .catch(() => {
                 // Si falla, intentar devolver index.html para SPA routing
                 if (event.request.mode === 'navigate') {
-                    return caches.match('/index.html');
+                    return caches.match('./index.html');
                 }
             })
     );

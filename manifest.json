@@ -2,14 +2,14 @@
   "name": "Volume Tracker",
   "short_name": "Volume",
   "description": "Tracking de volumen muscular con ventana móvil de 7 días",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f172a",
   "theme_color": "#1e293b",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "./icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
@@ -20,15 +20,15 @@
       "name": "Hoy",
       "short_name": "Hoy",
       "description": "Editar sesión de hoy",
-      "url": "/?date=today",
-      "icons": [{ "src": "/icon.svg", "sizes": "96x96" }]
+      "url": "./?date=today",
+      "icons": [{ "src": "./icon.svg", "sizes": "96x96" }]
     },
     {
       "name": "Ayer",
       "short_name": "Ayer",
       "description": "Editar sesión de ayer",
-      "url": "/?date=yesterday",
-      "icons": [{ "src": "/icon.svg", "sizes": "96x96" }]
+      "url": "./?date=yesterday",
+      "icons": [{ "src": "./icon.svg", "sizes": "96x96" }]
     }
   ],
   "categories": ["health", "fitness", "productivity"],
