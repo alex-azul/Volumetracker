@@ -15,6 +15,11 @@ async function init() {
 
 // Configurar event listeners
 function setupEventListeners() {
+    // Prevenir zoom con gestos (Safari iOS)
+    document.addEventListener('gesturestart', (e) => e.preventDefault());
+    document.addEventListener('gesturechange', (e) => e.preventDefault());
+    document.addEventListener('gestureend', (e) => e.preventDefault());
+
     // Navegación principal
     document.getElementById('btn-edit-today').addEventListener('click', () => {
         currentEditDate = getTodayStr();
